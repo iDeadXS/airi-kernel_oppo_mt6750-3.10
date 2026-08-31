@@ -1,0 +1,105 @@
+#
+# NOTE! Don't add files that are generated in specific
+# subdirectories here. Add them in the ".gitignore" file
+# in that subdirectory instead.
+#
+# NOTE! Please use 'git ls-files -i --exclude-standard'
+# command after changing this file, to see if there are
+# any tracked files which get ignored after the change.
+#
+# Normal rules
+#
+.*
+*.o
+*.o.*
+*.a
+*.s
+*.ko
+*.so
+*.so.dbg
+*.mod.c
+*.i
+*.lst
+*.symtypes
+*.order
+modules.builtin
+*.elf
+*.bin
+*.gz
+*.bz2
+*.lzma
+*.xz
+*.lzo
+*.patch
+*.gcno
+
+#
+# Top-level generic files
+#
+/tags
+/TAGS
+/linux
+/vmlinux
+/vmlinuz
+/System.map
+/Module.markers
+/Module.symvers
+
+#
+# Debian directory (make deb-pkg)
+#
+/debian/
+
+#
+# git files that we don't want to ignore even it they are dot-files
+#
+!.gitignore
+!.mailmap
+
+#
+# Generated include files
+#
+include/config
+include/generated
+arch/*/include/generated
+
+# stgit generated dirs
+patches-*
+
+# quilt's files (top level only; the tree tracks .../mali-*/patches/)
+/patches
+/series
+
+# cscope files
+cscope.*
+ncscope.*
+
+# gnu global files
+GPATH
+GRTAGS
+GSYMS
+GTAGS
+
+*.orig
+*~
+\#*#
+
+#
+# Tracked sources that the generic rules above would otherwise swallow.
+# These are real files in the tree, not build output.
+#
+!/drivers/input/touchscreen/mediatek/*/*.i
+!/drivers/misc/mediatek/connectivity/combo/drv_wlan/mt6630/wlan/os/linux/gl_sec.o.new
+!/drivers/misc/mediatek/gpu/*/mali*/patches/*.patch
+
+#
+# MediaTek DrvGen/DCT generated sources (see scripts/drvgen/drvgen.mk).
+# Only Makefile and codegen.dws are real sources in these directories;
+# everything else is regenerated on every build and has no clean rule.
+#
+/drivers/misc/mediatek/mach/*/*/dct/dct/*
+!/drivers/misc/mediatek/mach/*/*/dct/dct/Makefile
+!/drivers/misc/mediatek/mach/*/*/dct/dct/codegen.dws
+
+# build logs (how-to-build.txt pipes make through `tee build.log`)
+/build*.log
