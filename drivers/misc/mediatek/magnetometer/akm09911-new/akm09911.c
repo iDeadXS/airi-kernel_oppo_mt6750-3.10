@@ -61,7 +61,15 @@
 /*xiaohua.tian@Prd6.BaseDrv.Sensor,2016/08/15 Modify for[BugId:839415] pokemon go has no genius after opening AR*/
 #include <linux/hwmsen_dev.h>
 #define AKM09911_MIN_DELAY	10
+/* The pseudo-gyro (6D) paths below assign the gs_/rv_/gr_/la_ members of
+ * struct mag_control_path and struct mag_data_path, which only exist when
+ * AKM_SENSOR_09911 is defined (see magnetometer/inc/mag.h). The top-level
+ * Makefile defines it for a subset of OPPO_TARGET_DEVICE only, so key this
+ * off the same macro instead of enabling it unconditionally.
+ */
+#ifdef AKM_SENSOR_09911
 #define AKM_Pseudogyro		   // enable this if you need use 6D gyro
+#endif
 #endif
 
 #define POWER_NONE_MACRO MT65XX_POWER_NONE
