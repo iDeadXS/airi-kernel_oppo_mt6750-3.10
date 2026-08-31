@@ -1,7 +1,7 @@
 ifdef MTK_PLATFORM
 
 PRIVATE_CUSTOM_KERNEL_DCT := $(if $(CUSTOM_KERNEL_DCT),$(CUSTOM_KERNEL_DCT),dct)
-ifneq ($(wildcard $(PWD)/arch/arm/mach-$(MTK_PLATFORM)/$(MTK_PROJECT)/dct/$(PRIVATE_CUSTOM_KERNEL_DCT)/codegen.dws),)
+ifneq ($(wildcard $(srctree)/arch/arm/mach-$(MTK_PLATFORM)/$(MTK_PROJECT)/dct/$(PRIVATE_CUSTOM_KERNEL_DCT)/codegen.dws),)
   DRVGEN_PATH := arch/arm/mach-$(MTK_PLATFORM)/$(MTK_PROJECT)/dct/$(PRIVATE_CUSTOM_KERNEL_DCT)
 else
   DRVGEN_PATH := drivers/misc/mediatek/mach/$(MTK_PLATFORM)/$(MTK_PROJECT)/dct/$(PRIVATE_CUSTOM_KERNEL_DCT)
@@ -110,16 +110,16 @@ ifeq ($(MTK_PLATFORM),mt6755)
 endif
 
 ifdef CONFIG_MTK_LEGACY
-DRVGEN_TOOL := $(PWD)/tools/dct/DrvGen
+DRVGEN_TOOL := $(srctree)/tools/dct/DrvGen
 else
-DRVGEN_TOOL := $(PWD)/tools/dct/DGenKS
+DRVGEN_TOOL := $(srctree)/tools/dct/DGenKS
 ALL_DRVGEN_FILE += cust.dtsi
 endif
 
 DRVGEN_FILE_LIST := $(addprefix $(DRVGEN_OUT)/,$(ALL_DRVGEN_FILE))
 
-DWS_FILE := $(PWD)/$(DRVGEN_PATH)/codegen.dws
-DRVGEN_PREBUILT_PATH := $(PWD)/$(DRVGEN_PATH)
+DWS_FILE := $(srctree)/$(DRVGEN_PATH)/codegen.dws
+DRVGEN_PREBUILT_PATH := $(srctree)/$(DRVGEN_PATH)
 DRVGEN_PREBUILT_CHECK := $(filter-out $(wildcard $(addprefix $(DRVGEN_PREBUILT_PATH)/,$(ALL_DRVGEN_FILE))),$(addprefix $(DRVGEN_PREBUILT_PATH)/,$(ALL_DRVGEN_FILE)))
 
 .PHONY: drvgen
