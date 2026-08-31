@@ -1057,7 +1057,7 @@ config OPPO_TOUCHPANEL_FT5436
     default n
 	
 config OPPO_TOUCHPANEL_GT5688
-    bool "FT5436 for Mediatek package"
+    bool "GT5688 for Mediatek package"
     default n
 	
 endif
