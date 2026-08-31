@@ -4,6 +4,7 @@
 include $(srctree)/drivers/misc/mediatek/Makefile.custom
 
 ccflags-y += -I$(srctree)/drivers/misc/mediatek/ext_disp/  \
+             -I$(srctree)/drivers/misc/mediatek/ext_disp/$(MTK_PLATFORM) \
              -I$(srctree)/drivers/misc/mediatek/video/common \
              -I$(srctree)/drivers/misc/mediatek/video/include \
              -I$(srctree)/drivers/misc/mediatek/gpu/ged/include \
