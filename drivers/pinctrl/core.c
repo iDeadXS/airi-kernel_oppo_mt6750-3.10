@@ -1109,14 +1109,8 @@ void devm_pinctrl_put(struct pinctrl *p)
 }
 EXPORT_SYMBOL_GPL(devm_pinctrl_put);
 
-#ifndef VENDOR_EDIT 
-// wenxian.zhen@Phone.Bsp.Driver, 2016/03/30  modified for force add lock, avoid  die during boot	
-int pinctrl_register_map(struct pinctrl_map const *maps, unsigned num_maps,
-			 bool dup, bool locked)
-#else
 int pinctrl_register_map(struct pinctrl_map const *maps, unsigned num_maps,
 			 bool dup)
-#endif
 {
 	int i, ret;
 	struct pinctrl_maps *maps_node;
@@ -1184,19 +1178,11 @@ int pinctrl_register_map(struct pinctrl_map const *maps, unsigned num_maps,
 		maps_node->maps = maps;
 	}
 
-#ifndef VENDOR_EDIT 
-// wenxian.zhen@Phone.Bsp.Driver, 2016/03/30  modified for force add lock, avoid  die during boot	
-	if (!locked)
-		mutex_lock(&pinctrl_maps_mutex);
-	list_add_tail(&maps_node->node, &pinctrl_maps);
-	if (!locked)
-		mutex_unlock(&pinctrl_maps_mutex);
-#else
 	mutex_lock(&pinctrl_maps_mutex);
 	list_add_tail(&maps_node->node, &pinctrl_maps);
 	mutex_unlock(&pinctrl_maps_mutex);
-#endif
-return 0;
+
+	return 0;
 }
 
 /**
@@ -1209,12 +1195,7 @@ return 0;
 int pinctrl_register_mappings(struct pinctrl_map const *maps,
 			      unsigned num_maps)
 {
-#ifndef VENDOR_EDIT 
-// wenxian.zhen@Phone.Bsp.Driver, 2016/03/30  modified for force add lock, avoid  die during boot	
-	return pinctrl_register_map(maps, num_maps, true, false);
-#else
 	return pinctrl_register_map(maps, num_maps, true);
-#endif
 }
 
 void pinctrl_unregister_map(struct pinctrl_map const *map)
