@@ -30,6 +30,7 @@
 #include <linux/highmem.h>
 #include <linux/slab.h>
 #include <linux/lzo.h>
+#include <linux/lz4.h>
 #include <linux/string.h>
 #include <linux/vmalloc.h>
 #include <linux/proc_fs.h>
@@ -1082,6 +1083,12 @@ struct zram_meta *zram_meta_alloc(u64 disksize)
 #else
 	meta->compress_workmem = kzalloc(LZO1X_MEM_COMPRESS, GFP_KERNEL);
 #endif
+	/*
+	 * LZO1X_MEM_COMPRESS (16384 * sizeof(char *)) is >= LZ4_MEM_COMPRESS
+	 * (4096 * sizeof(char *)) on every supported config, so the single
+	 * allocation above also serves the LZ4 backend. Keep it that way.
+	 */
+	BUILD_BUG_ON(LZO1X_MEM_COMPRESS < LZ4_MEM_COMPRESS);
 	if (!meta->compress_workmem)
 		goto free_meta;
 
@@ -1340,14 +1347,22 @@ static int __init zram_init(void)
 			goto free_devices;
 	}
 
-	/* Set compression/decompression hooks - Use LZO1X by default */
+	/* Set compression/decompression hooks - LZ4 by default (ZRAM_LZ4_COMPRESS) */
 	if (!zram_compress || !zram_decompress) {
 #ifdef CONFIG_ZSM
 		zram_compress = &lzo1x_1_compress_zram;
+		zram_decompress = &lzo1x_decompress_safe;
+		zram_comp = "lzo (ZSM)";
+#elif defined(CONFIG_ZRAM_LZ4_COMPRESS)
+		/* comp_hook/decomp_hook signatures match the lz4 entry points exactly */
+		zram_compress = &lz4_compress;
+		zram_decompress = &lz4_decompress_unknownoutputsize;
+		zram_comp = "lz4";
 #else
 		zram_compress = &lzo1x_1_compress;
-#endif
 		zram_decompress = &lzo1x_decompress_safe;
+		zram_comp = "lzo";
+#endif
 	}
 	printk(KERN_ALERT "[%s][%d] ZCompress[%p] ZDecompress[%p]\n", __FUNCTION__, __LINE__, zram_compress, zram_decompress);
 	proc_create("zraminfo", 0, NULL, &zraminfo_proc_fops);

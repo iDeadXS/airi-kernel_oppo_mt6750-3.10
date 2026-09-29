@@ -29,3 +29,17 @@ config ZSM
 	default n
 	help
 	  This option enhance ZRAM by finding and merging same pages in ZRAM.
+
+config ZRAM_LZ4_COMPRESS
+	bool "Use LZ4 as the default compression algorithm"
+	depends on ZRAM
+	select LZ4_COMPRESS
+	select LZ4_DECOMPRESS
+	default y
+	help
+	  Default zram compression to LZ4 instead of LZO. LZ4 decompresses
+	  several times faster than LZO at a comparable ratio, which directly
+	  shortens the swap-in path that an audio thread blocks on when its
+	  working set was swapped out. Pages already stored as LZO remain
+	  readable only by the LZO backend, so this must be chosen before the
+	  swapfile is first written (fresh zram format).
