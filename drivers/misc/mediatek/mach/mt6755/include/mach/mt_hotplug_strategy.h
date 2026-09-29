@@ -51,6 +51,12 @@ extern "C" {
 /*=============================================================*/
 /* Global function declaration */
 /*=============================================================*/
+#ifndef CONFIG_MTK_HOTPLUG_STRATEGY
+/* HPS built out: no-op stubs so the few external consumers (hibernate
+ * core, l2c_share) still link. Only hps_set_enabled is used outside
+ * the HPS object group. */
+static inline int hps_set_enabled(unsigned int enabled) { return 0; }
+#else
 	extern int hps_get_enabled(unsigned int *enabled_ptr);
 	extern int hps_set_enabled(unsigned int enabled);
 	extern int hps_get_cpu_num_base(hps_base_type_e type, unsigned int *little_cpu_ptr,
@@ -72,6 +78,7 @@ extern "C" {
 	extern unsigned int hps_get_ctrl_source(void);
 	extern int hps_set_enabled_ext(unsigned int source, unsigned int enabled);
 #endif
+#endif /* CONFIG_MTK_HOTPLUG_STRATEGY */
 
 /*=============================================================*/
 /* End */

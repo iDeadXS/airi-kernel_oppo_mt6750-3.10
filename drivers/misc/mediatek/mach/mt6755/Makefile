@@ -41,7 +41,7 @@ obj-y += hotplug.o
 obj-y += mt-headsmp.o
 obj-y += mt_hotplug.o
 #obj-y += mt_hotplug_mechanism.o
-obj-y += mt_hotplug_strategy_main.o mt_hotplug_strategy_core.o mt_hotplug_strategy_procfs.o mt_hotplug_strategy_cpu.o mt_hotplug_strategy_api.o mt_hotplug_strategy_algo.o
+obj-$(CONFIG_MTK_HOTPLUG_STRATEGY) += mt_hotplug_strategy_main.o mt_hotplug_strategy_core.o mt_hotplug_strategy_procfs.o mt_hotplug_strategy_cpu.o mt_hotplug_strategy_api.o mt_hotplug_strategy_algo.o
 obj-y += innercache.o
 #obj-y += mt_l2c.o
 #obj-y += eint.o
@@ -105,7 +105,7 @@ obj-y += mt_static_power.o
 #obj-y += mt_picachu.o
 obj-y += mt_ptp.o
 #obj-y += mt_ptp2.o
-obj-y += mt_cpufreq_hybrid.o
+obj-$(CONFIG_HYBRID_CPU_DVFS) += mt_cpufreq_hybrid.o
 ##obj-y += mssv.o
 #
 ## Hibernation
@@ -165,14 +165,14 @@ obj-y += mt_pm_init.o
 endif
 # Mediatek psci wrapper
 obj-$(CONFIG_MTK_PSCI)	+= mt_psci.o
-obj-y += mt_hotplug_strategy_main.o mt_hotplug_strategy_core.o mt_hotplug_strategy_procfs.o mt_hotplug_strategy_cpu.o mt_hotplug_strategy_api.o mt_hotplug_strategy_algo.o
+obj-$(CONFIG_MTK_HOTPLUG_STRATEGY) += mt_hotplug_strategy_main.o mt_hotplug_strategy_core.o mt_hotplug_strategy_procfs.o mt_hotplug_strategy_cpu.o mt_hotplug_strategy_api.o mt_hotplug_strategy_algo.o
 #obj-y += mt_ptp2.o
 obj-y += mt_picachu.o
 obj-y += mt_ptp.o
 obj-y += mt_static_power.o
 #obj-y += spinlock_test.o
 #obj-y += kmalloc_test.o
-obj-y += mt_cpufreq_hybrid.o
+obj-$(CONFIG_HYBRID_CPU_DVFS) += mt_cpufreq_hybrid.o
 
 #########################
 # CPU Dormant

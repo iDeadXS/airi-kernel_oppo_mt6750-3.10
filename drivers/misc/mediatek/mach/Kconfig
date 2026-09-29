@@ -46,3 +46,15 @@ config MAX_DRAM_SIZE_SUPPORT
 	  reserved for the modem and the PMEM.
 
 endmenu
+
+config MTK_HOTPLUG_STRATEGY
+	bool "MTK hotplug strategy (HPS) core scheduler"
+	depends on ARCH_MT6755 || ARCH_MT6750
+	default n
+	help
+	  Vendor hot(un)plug decision engine (mt_hotplug_strategy_*).
+	  Disabled for audio-focused builds: core on/off decisions are left
+	  to cpuidle and the user; the audio pipeline loses cores mid-stream
+	  when HPS predicts low load and pays a full hotplug latency plus
+	  cache refill to get them back. Say N unless you want Oppo/MTK
+	  stock core management. Generic CONFIG_HOTPLUG_CPU stays on.
