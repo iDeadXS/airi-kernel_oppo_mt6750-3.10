@@ -137,6 +137,20 @@ static int mtk_asoc_dl1_probe(struct snd_soc_platform *platform);
 
 static bool mPrepareDone;
 
+/*
+ * AFE_I2S_CON1 bit 12 ("low jitter mode"): clock the I2S DAC output from
+ * the APLL divider chain instead of the fixed divider. Stock DL1 playback
+ * passes false. Default stays false (stock behaviour preserved); set
+ * low_jitter_i2s_dac=1 on the cmdline or echo 1 >
+ * /sys/module/mt_soc_pcm_dl1/parameters/low_jitter_i2s_dac before a
+ * stream opens to APLL-clock the DAC path. NO on-device verification in
+ * this pass - flip it back to 0 if the DAC path loses lock.
+ */
+static bool low_jitter_i2s_dac;
+module_param(low_jitter_i2s_dac, bool, 0644);
+MODULE_PARM_DESC(low_jitter_i2s_dac,
+		 "Use APLL low-jitter clocking for the DL1 I2S DAC output");
+
 #define USE_RATE        (SNDRV_PCM_RATE_CONTINUOUS | SNDRV_PCM_RATE_8000_48000)
 #define USE_RATE_MIN        8000
 #define USE_RATE_MAX        192000
@@ -410,7 +424,7 @@ static int mtk_pcm_prepare(struct snd_pcm_substream *substream)
 		/* start I2S DAC out */
 		if (GetMemoryPathEnable(Soc_Aud_Digital_Block_I2S_OUT_DAC) == false) {
 			SetMemoryPathEnable(Soc_Aud_Digital_Block_I2S_OUT_DAC, true);
-			SetI2SDacOut(substream->runtime->rate, false, mI2SWLen);
+			SetI2SDacOut(substream->runtime->rate, low_jitter_i2s_dac, mI2SWLen);
 			SetI2SDacEnable(true);
 		} else {
 			SetMemoryPathEnable(Soc_Aud_Digital_Block_I2S_OUT_DAC, true);
