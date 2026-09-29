@@ -93,7 +93,10 @@ static int tc_mid_trip = -275000;
 #if !defined(CONFIG_ARCH_MT6755)
 static int trip_temp[10] = { 117000, 100000, 85000, 75000, 65000, 55000, 45000, 35000, 25000, 15000 };
 #else
-static int trip_temp[10] = { 117000,  90000, 85000, 75000, 65000, 55000, 45000, 35000, 25000, 15000 };
+/* airi-audio-extr: software trips raised +5C per level below the HW
+ * cutoff (trip[0] unchanged = hardware protection point). Original:
+ * { 117000, 90000, 85000, 75000, 65000, ... } */
+static int trip_temp[10] = { 117000,  95000, 90000, 80000, 70000, 55000, 45000, 35000, 25000, 15000 };
 #endif
 int tscpu_read_curr_temp;
 
